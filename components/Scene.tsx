@@ -66,14 +66,13 @@ const Scene: React.FC = () => {
         penumbra={1} 
         intensity={2} 
         color="#fff" 
-        castShadow 
       />
 
-      {/* Reflections */}
-      <Environment preset="city" />
+      {/* Reflections - disabled on mobile */}
+      {!isMobile && <Environment preset="city" />}
 
-      {/* Background Ambience */}
-      <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+      {/* Background Ambience - reduced on mobile */}
+      <Stars radius={100} depth={50} count={isMobile ? 1000 : 5000} factor={4} saturation={0} fade speed={1} />
       <fog attach="fog" args={['#000502', 10, 60]} />
 
       {/* Content */}
