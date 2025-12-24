@@ -66,6 +66,7 @@ const Scene: React.FC = () => {
         penumbra={1} 
         intensity={2} 
         color="#fff" 
+        castShadow={!isMobile}
       />
 
       {/* Reflections - disabled on mobile */}

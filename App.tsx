@@ -62,13 +62,13 @@ const App: React.FC = () => {
       {/* 3D Canvas */}
       <ErrorBoundary fallback={<div>3D 渲染失败</div>}>
         <Canvas
-          shadows={false}
-          dpr={1}
+          shadows={!isMobile}
+          dpr={isMobile ? 1 : [1, 2]}
           gl={{ 
-            antialias: false, 
+            antialias: !isMobile, 
             toneMapping: 3,
             toneMappingExposure: 1.5,
-            powerPreference: 'default',
+            powerPreference: isMobile ? 'low-power' : 'high-performance',
             failIfMajorPerformanceCaveat: false,
             preserveDrawingBuffer: true
           }}
