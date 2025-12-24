@@ -9,22 +9,23 @@ interface PolaroidProps {
 }
 
 // 将你的照片放入 public/photos 文件夹，命名为 1.jpg, 2.jpg ... 15.jpg
+const BASE_URL = import.meta.env.BASE_URL;
 const images = [
-  '/photos/1.jpg',
-  '/photos/2.jpg',
-  '/photos/3.jpg',
-  '/photos/4.jpg',
-  '/photos/5.jpg',
-  '/photos/6.jpg',
-  '/photos/7.jpg',
-  '/photos/8.jpg',
-  '/photos/9.jpg',
-  '/photos/10.jpg',
-  '/photos/11.jpg',
-  '/photos/12.jpg',
-  '/photos/13.jpg',
-  '/photos/14.jpg',
-  '/photos/15.jpg'
+  `${BASE_URL}photos/1.jpg`,
+  `${BASE_URL}photos/2.jpg`,
+  `${BASE_URL}photos/3.jpg`,
+  `${BASE_URL}photos/4.jpg`,
+  `${BASE_URL}photos/5.jpg`,
+  `${BASE_URL}photos/6.jpg`,
+  `${BASE_URL}photos/7.jpg`,
+  `${BASE_URL}photos/8.jpg`,
+  `${BASE_URL}photos/9.jpg`,
+  `${BASE_URL}photos/10.jpg`,
+  `${BASE_URL}photos/11.jpg`,
+  `${BASE_URL}photos/12.jpg`,
+  `${BASE_URL}photos/13.jpg`,
+  `${BASE_URL}photos/14.jpg`,
+  `${BASE_URL}photos/15.jpg`
 ];
 
 const PolaroidPhoto: React.FC<{ url: string }> = ({ url }) => {

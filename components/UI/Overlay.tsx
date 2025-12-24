@@ -24,7 +24,7 @@ const Overlay: React.FC = () => {
     <div className="absolute inset-0 pointer-events-none select-none flex flex-col justify-between p-8 z-10">
       
       {/* 背景音乐 */}
-      <audio ref={audioRef} src="/儿歌-铃儿响叮当 (英语).ogg" loop />
+      <audio ref={audioRef} src={`${import.meta.env.BASE_URL}儿歌-铃儿响叮当 (英语).ogg`} loop />
       
       {/* 音乐播放按钮 */}
       <button
