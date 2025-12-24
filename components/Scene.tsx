@@ -80,10 +80,10 @@ const Scene: React.FC = () => {
       {/* Position kept at 0.5 as requested previously */}
       <group position={[0, 0.5, 0]}>
         {/* Emerald Needles (Tetrahedrons for sharpness) */}
-        <ArixParticles count={isMobile ? 1000 : 2500} color="#004d33" size={0.15} type="emerald" shape="tetra" />
+        <ArixParticles count={isMobile ? 500 : 2500} color="#004d33" size={0.15} type="emerald" shape="tetra" />
         
         {/* Gold Ornaments (Boxes/Cubes for glint) */}
-        <ArixParticles count={isMobile ? 600 : 1500} color="#FFD700" size={0.12} type="gold" shape="box" />
+        <ArixParticles count={isMobile ? 300 : 1500} color="#FFD700" size={0.12} type="gold" shape="box" />
         
         {/* Photos */}
         <React.Suspense fallback={null}>
@@ -91,8 +91,8 @@ const Scene: React.FC = () => {
         </React.Suspense>
       </group>
 
-      {/* Post Processing for the "Arix Signature" Look - simplified on mobile */}
-      {!isMobile ? (
+      {/* Post Processing - disabled on mobile for compatibility */}
+      {!isMobile && (
         <EffectComposer disableNormalPass>
           <Bloom 
             luminanceThreshold={0.6}
@@ -102,14 +102,6 @@ const Scene: React.FC = () => {
           />
           <Vignette eskil={false} offset={0.1} darkness={1.1} />
           <Noise opacity={0.05} />
-        </EffectComposer>
-      ) : (
-        <EffectComposer disableNormalPass>
-          <Bloom 
-            luminanceThreshold={0.7}
-            luminanceSmoothing={0.9} 
-            intensity={0.8} 
-          />
         </EffectComposer>
       )}
     </>

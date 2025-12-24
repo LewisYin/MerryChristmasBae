@@ -5,18 +5,21 @@ import GestureController from './components/GestureController';
 import Overlay from './components/UI/Overlay';
 
 const App: React.FC = () => {
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  
   return (
     <div className="relative w-full h-screen bg-[#000502]">
       {/* 3D Canvas */}
       <Canvas
-        shadows
-        dpr={[1, 1.5]}
+        shadows={!isMobile}
+        dpr={isMobile ? 1 : [1, 1.5]}
         gl={{ 
           antialias: false, 
-          toneMapping: 3, // THREE.ReinhardToneMapping
+          toneMapping: 3,
           toneMappingExposure: 1.5,
-          powerPreference: 'high-performance',
-          failIfMajorPerformanceCaveat: false
+          powerPreference: isMobile ? 'low-power' : 'high-performance',
+          failIfMajorPerformanceCaveat: false,
+          preserveDrawingBuffer: true
         }}
         onCreated={({ gl }) => {
           gl.setClearColor('#000502');
@@ -28,8 +31,6 @@ const App: React.FC = () => {
       {/* Logic & UI Layers */}
       <GestureController />
       <Overlay />
-      
-      {/* Texture Preloader / Fallback Logic could go here */}
     </div>
   );
 };
