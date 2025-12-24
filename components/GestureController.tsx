@@ -18,14 +18,26 @@ const GestureController: React.FC = () => {
           "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm"
         );
         
-        handLandmarker = await HandLandmarker.createFromOptions(vision, {
-          baseOptions: {
-            modelAssetPath: "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
-            delegate: "GPU"
-          },
-          runningMode: "VIDEO",
-          numHands: 1
-        });
+        // 尝试 GPU，失败则回退到 CPU
+        try {
+          handLandmarker = await HandLandmarker.createFromOptions(vision, {
+            baseOptions: {
+              modelAssetPath: "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
+              delegate: "GPU"
+            },
+            runningMode: "VIDEO",
+            numHands: 1
+          });
+        } catch {
+          handLandmarker = await HandLandmarker.createFromOptions(vision, {
+            baseOptions: {
+              modelAssetPath: "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
+              delegate: "CPU"
+            },
+            runningMode: "VIDEO",
+            numHands: 1
+          });
+        }
         
         setLoading(false);
         startWebcam();
@@ -37,12 +49,16 @@ const GestureController: React.FC = () => {
     const startWebcam = async () => {
       if (!videoRef.current) return;
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          video: { facingMode: 'user' } 
+        });
         videoRef.current.srcObject = stream;
         videoRef.current.addEventListener('loadeddata', predictWebcam);
         setPermissionGranted(true);
       } catch (err) {
         console.error("Webcam access denied:", err);
+        // 即使摄像头失败，也让树正常显示
+        setPermissionGranted(false);
       }
     };
 

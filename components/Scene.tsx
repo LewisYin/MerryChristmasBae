@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Environment, OrbitControls, PerspectiveCamera, Stars } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette, Noise } from '@react-three/postprocessing';
@@ -9,7 +9,12 @@ import PolaroidGallery from './Visuals/PolaroidGallery';
 
 const Scene: React.FC = () => {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
-  const controlsRef = useRef<any>(null); // OrbitControls type is tricky
+  const controlsRef = useRef<any>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+  }, []);
   
   useFrame((state, delta) => {
     // Read state directly without triggering re-render
@@ -75,10 +80,10 @@ const Scene: React.FC = () => {
       {/* Position kept at 0.5 as requested previously */}
       <group position={[0, 0.5, 0]}>
         {/* Emerald Needles (Tetrahedrons for sharpness) */}
-        <ArixParticles count={2500} color="#004d33" size={0.15} type="emerald" shape="tetra" />
+        <ArixParticles count={isMobile ? 1000 : 2500} color="#004d33" size={0.15} type="emerald" shape="tetra" />
         
         {/* Gold Ornaments (Boxes/Cubes for glint) */}
-        <ArixParticles count={1500} color="#FFD700" size={0.12} type="gold" shape="box" />
+        <ArixParticles count={isMobile ? 600 : 1500} color="#FFD700" size={0.12} type="gold" shape="box" />
         
         {/* Photos */}
         <React.Suspense fallback={null}>
@@ -86,17 +91,27 @@ const Scene: React.FC = () => {
         </React.Suspense>
       </group>
 
-      {/* Post Processing for the "Arix Signature" Look */}
-      <EffectComposer disableNormalPass>
-        <Bloom 
-          luminanceThreshold={0.6} // Only bright golds/whites glow
-          luminanceSmoothing={0.9} 
-          intensity={1.5} 
-          radius={0.6}
-        />
-        <Vignette eskil={false} offset={0.1} darkness={1.1} />
-        <Noise opacity={0.05} /> {/* Film grain */}
-      </EffectComposer>
+      {/* Post Processing for the "Arix Signature" Look - simplified on mobile */}
+      {!isMobile ? (
+        <EffectComposer disableNormalPass>
+          <Bloom 
+            luminanceThreshold={0.6}
+            luminanceSmoothing={0.9} 
+            intensity={1.5} 
+            radius={0.6}
+          />
+          <Vignette eskil={false} offset={0.1} darkness={1.1} />
+          <Noise opacity={0.05} />
+        </EffectComposer>
+      ) : (
+        <EffectComposer disableNormalPass>
+          <Bloom 
+            luminanceThreshold={0.7}
+            luminanceSmoothing={0.9} 
+            intensity={0.8} 
+          />
+        </EffectComposer>
+      )}
     </>
   );
 };

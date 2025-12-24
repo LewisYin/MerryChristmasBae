@@ -10,11 +10,16 @@ const App: React.FC = () => {
       {/* 3D Canvas */}
       <Canvas
         shadows
-        dpr={[1, 2]}
+        dpr={[1, 1.5]}
         gl={{ 
           antialias: false, 
           toneMapping: 3, // THREE.ReinhardToneMapping
-          toneMappingExposure: 1.5 
+          toneMappingExposure: 1.5,
+          powerPreference: 'high-performance',
+          failIfMajorPerformanceCaveat: false
+        }}
+        onCreated={({ gl }) => {
+          gl.setClearColor('#000502');
         }}
       >
         <Scene />
